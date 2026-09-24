@@ -1,0 +1,11 @@
+[project]
+name = "dc"
+version = "0.1.0"
+description = "Autonomous digital company control plane"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
