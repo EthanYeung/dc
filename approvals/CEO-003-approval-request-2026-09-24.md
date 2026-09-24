@@ -2,9 +2,10 @@
 
 - Request date: 2026-09-24
 - Requesting role: Allocator
-- State: PENDING_FOUNDER_DECISION
+- State: APPROVED
+- Decision date: 2026-09-25
 - Linked evidence: `evidence/CEO-003-cash-mechanism-decision-2026-09-24.md`
-- Record type: repository approval request only; no approval row has been created in SQLite.
+- Record type: repository approval record; no approval row has been created in SQLite.
 
 ## Decision requested
 
@@ -23,7 +24,7 @@ Candidate A is a fixed-scope, direct B2B prepaid manual service. The Auditor ret
 
 ## Explicitly not authorized
 
-This request does not authorize contacting buyers, posting or listing offers, creating accounts, expanding credentials, collecting customer data, accepting payment, making legal/tax or performance claims, promising delivery, deploying a product, incurring any expense, or creating an active Experiment. Any external channel operation or real cash test requires a separate, specific approval request after the preflight.
+This approval does not authorize contacting buyers, posting or listing offers, creating accounts, expanding credentials, collecting customer data, accepting payment, making legal/tax or performance claims, promising delivery, deploying a product, incurring any expense, or creating an active Experiment. Any external channel operation or real cash test requires a separate, specific approval request after the preflight.
 
 ## Risk and stop conditions
 
@@ -31,18 +32,18 @@ This request does not authorize contacting buyers, posting or listing offers, cr
 - Maximum agent time: 2 hours.
 - Founder attention: asynchronous decision only; no meeting requested.
 - Stop if the channel's permission, account eligibility/KYC, settlement and withdrawal path, refund/chargeback exposure, applicable legal/tax boundary, or reliable evidence path remains unclear.
-- Do not treat this request as approval of the proposed $149 test price or the two-hour fulfillment assumption; both remain unvalidated hypotheses.
+- Do not treat this approval as approval of the proposed $149 test price or the two-hour fulfillment assumption; both remain unvalidated hypotheses.
 
 ## Founder decision
 
-- [ ] APPROVE the bounded Stage 0 preflight exactly as scoped above.
+- [x] APPROVE the bounded Stage 0 preflight exactly as scoped above.
 - [ ] DECLINE; keep candidate A closed and remain in DISCOVERY.
 - [ ] RETURN for revision.
 
 Decision / scope changes:
 
-`____________________________________________________________`
+`Approved exactly as scoped. No additional authority granted.`
 
 Founder name and decision date:
 
-`____________________________________________________________`
+`Founder — 2026-09-25`
