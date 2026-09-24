@@ -1,4 +1,19 @@
-version: 1
+version: 2
+
+delegation:
+  principle: "subagent authority must not exceed parent authority"
+  effective_scope: "parent_role AND delegated_task AND subagent_safety_ceiling"
+  consequential_actions_route_to_parent: true
+  subagent_may_not:
+    - spend
+    - create_financial_commitment
+    - modify_company_state
+    - grant_approval
+    - modify_constitution
+    - modify_policy
+    - expand_credential_scope
+    - access_master_credentials
+    - perform_unapproved_irreversible_action
 
 roles:
   allocator:
@@ -10,6 +25,7 @@ roles:
       - stop_experiment
       - read_ledger
       - request_approval
+      - spawn_bounded_subagent
     deny:
       - modify_constitution
       - expand_credential_scope
@@ -23,6 +39,7 @@ roles:
       - analysis
       - write_evidence
       - request_task
+      - spawn_bounded_subagent
     deny:
       - production_deploy
       - production_delete
@@ -36,6 +53,7 @@ roles:
       - approved_deploy
       - browser
       - computer_use
+      - spawn_bounded_subagent
     deny:
       - alter_financial_limits
       - unapproved_recurring_commitment
@@ -47,6 +65,7 @@ roles:
       - approved_channel_operation
       - write_evidence
       - spend_within_experiment_budget
+      - spawn_bounded_subagent
     deny:
       - credential_admin
       - production_infrastructure_admin
@@ -57,6 +76,7 @@ roles:
       - read_audit_log
       - read_ledger
       - write_audit_finding
+      - spawn_bounded_subagent
     deny:
       - spend
       - deploy

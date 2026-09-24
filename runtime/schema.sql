@@ -10,6 +10,17 @@ CREATE TABLE IF NOT EXISTS company_state (
     last_reconciled_at TEXT
 );
 
+CREATE TABLE IF NOT EXISTS workers (
+    id TEXT PRIMARY KEY,
+    role TEXT NOT NULL UNIQUE,
+    hermes_profile_name TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'idle',
+    workspace_ref TEXT,
+    browser_profile_ref TEXT,
+    created_at TEXT NOT NULL,
+    last_seen_at TEXT
+);
+
 CREATE TABLE IF NOT EXISTS opportunities (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
@@ -55,20 +66,15 @@ CREATE TABLE IF NOT EXISTS distribution_assets (
     FOREIGN KEY (opportunity_id) REFERENCES opportunities(id)
 );
 
-CREATE TABLE IF NOT EXISTS commercial_signals (
+CREATE TABLE IF NOT EXISTS ventures (
     id TEXT PRIMARY KEY,
-    audience_id TEXT,
-    distribution_asset_id TEXT,
-    opportunity_id TEXT,
-    signal_type TEXT NOT NULL,
-    signal_strength INTEGER NOT NULL DEFAULT 1 CHECK (signal_strength BETWEEN 1 AND 5),
-    source TEXT,
-    evidence_id TEXT,
-    observed_at TEXT NOT NULL,
-    FOREIGN KEY (audience_id) REFERENCES audiences(id),
-    FOREIGN KEY (distribution_asset_id) REFERENCES distribution_assets(id),
-    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
-    FOREIGN KEY (evidence_id) REFERENCES evidence(id)
+    opportunity_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    state TEXT NOT NULL,
+    thesis TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id)
 );
 
 CREATE TABLE IF NOT EXISTS hypotheses (
@@ -78,7 +84,8 @@ CREATE TABLE IF NOT EXISTS hypotheses (
     statement TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'open',
     created_at TEXT NOT NULL,
-    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id)
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
+    FOREIGN KEY (venture_id) REFERENCES ventures(id)
 );
 
 CREATE TABLE IF NOT EXISTS experiments (
@@ -110,6 +117,108 @@ CREATE TABLE IF NOT EXISTS evidence (
     FOREIGN KEY (experiment_id) REFERENCES experiments(id)
 );
 
+CREATE TABLE IF NOT EXISTS commercial_signals (
+    id TEXT PRIMARY KEY,
+    audience_id TEXT,
+    distribution_asset_id TEXT,
+    opportunity_id TEXT,
+    signal_type TEXT NOT NULL,
+    signal_strength INTEGER NOT NULL DEFAULT 1 CHECK (signal_strength BETWEEN 1 AND 5),
+    source TEXT,
+    evidence_id TEXT,
+    observed_at TEXT NOT NULL,
+    FOREIGN KEY (audience_id) REFERENCES audiences(id),
+    FOREIGN KEY (distribution_asset_id) REFERENCES distribution_assets(id),
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
+    FOREIGN KEY (evidence_id) REFERENCES evidence(id)
+);
+
+CREATE TABLE IF NOT EXISTS work_items (
+    id TEXT PRIMARY KEY,
+    directive_ref TEXT,
+    owner_role TEXT NOT NULL,
+    opportunity_id TEXT,
+    venture_id TEXT,
+    experiment_id TEXT,
+    goal TEXT NOT NULL,
+    priority TEXT NOT NULL DEFAULT 'normal',
+    state TEXT NOT NULL DEFAULT 'ready',
+    budget_cap_usd REAL NOT NULL DEFAULT 0,
+    timebox_minutes INTEGER,
+    success_criteria TEXT,
+    failure_criteria TEXT,
+    stop_conditions TEXT,
+    approval_state TEXT NOT NULL DEFAULT 'not_required',
+    created_at TEXT NOT NULL,
+    claimed_at TEXT,
+    completed_at TEXT,
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
+    FOREIGN KEY (venture_id) REFERENCES ventures(id),
+    FOREIGN KEY (experiment_id) REFERENCES experiments(id)
+);
+
+CREATE TABLE IF NOT EXISTS worker_runs (
+    id TEXT PRIMARY KEY,
+    work_item_id TEXT NOT NULL,
+    worker_id TEXT NOT NULL,
+    state TEXT NOT NULL,
+    started_at TEXT NOT NULL,
+    last_heartbeat_at TEXT,
+    ended_at TEXT,
+    output_artifact_path TEXT,
+    error_summary TEXT,
+    FOREIGN KEY (work_item_id) REFERENCES work_items(id),
+    FOREIGN KEY (worker_id) REFERENCES workers(id)
+);
+
+CREATE TABLE IF NOT EXISTS subagent_runs (
+    id TEXT PRIMARY KEY,
+    parent_worker_run_id TEXT NOT NULL,
+    purpose TEXT NOT NULL,
+    effective_tool_scope TEXT,
+    state TEXT NOT NULL,
+    started_at TEXT NOT NULL,
+    ended_at TEXT,
+    output_artifact_path TEXT,
+    error_summary TEXT,
+    FOREIGN KEY (parent_worker_run_id) REFERENCES worker_runs(id)
+);
+
+CREATE TABLE IF NOT EXISTS events (
+    id TEXT PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    entity_type TEXT,
+    entity_id TEXT,
+    payload_json TEXT,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    state TEXT NOT NULL DEFAULT 'pending',
+    created_at TEXT NOT NULL,
+    consumed_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS approvals (
+    id TEXT PRIMARY KEY,
+    work_item_id TEXT,
+    action_type TEXT NOT NULL,
+    requested_by_role TEXT NOT NULL,
+    rationale TEXT NOT NULL,
+    requested_value_json TEXT,
+    state TEXT NOT NULL DEFAULT 'pending',
+    requested_at TEXT NOT NULL,
+    resolved_at TEXT,
+    resolved_by TEXT,
+    FOREIGN KEY (work_item_id) REFERENCES work_items(id)
+);
+
+CREATE TABLE IF NOT EXISTS leases (
+    lease_key TEXT PRIMARY KEY,
+    owner_run_id TEXT NOT NULL,
+    acquired_at TEXT NOT NULL,
+    heartbeat_at TEXT,
+    expires_at TEXT NOT NULL,
+    FOREIGN KEY (owner_run_id) REFERENCES worker_runs(id)
+);
+
 CREATE TABLE IF NOT EXISTS decisions (
     id TEXT PRIMARY KEY,
     actor_role TEXT NOT NULL,
@@ -129,16 +238,35 @@ CREATE TABLE IF NOT EXISTS ledger (
     experiment_id TEXT,
     venture_id TEXT,
     evidence_id TEXT,
-    occurred_at TEXT NOT NULL
+    occurred_at TEXT NOT NULL,
+    FOREIGN KEY (experiment_id) REFERENCES experiments(id),
+    FOREIGN KEY (venture_id) REFERENCES ventures(id),
+    FOREIGN KEY (evidence_id) REFERENCES evidence(id)
 );
 
 CREATE TABLE IF NOT EXISTS assets (
     id TEXT PRIMARY KEY,
     asset_type TEXT NOT NULL,
     name TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'active',
+    ownership_type TEXT NOT NULL DEFAULT 'owned' CHECK (ownership_type IN ('owned','rented','hybrid')),
+    opportunity_id TEXT,
+    venture_id TEXT,
+    source_experiment_id TEXT,
+    created_by_role TEXT,
     location TEXT,
+    build_cost_usd REAL NOT NULL DEFAULT 0,
+    maintenance_cost_monthly_usd REAL NOT NULL DEFAULT 0,
+    attributable_revenue_usd REAL,
     replacement_cost_usd REAL,
-    created_at TEXT NOT NULL
+    platform_dependency TEXT,
+    reuse_scope TEXT,
+    durability_notes TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
+    FOREIGN KEY (venture_id) REFERENCES ventures(id),
+    FOREIGN KEY (source_experiment_id) REFERENCES experiments(id)
 );
 
 CREATE TABLE IF NOT EXISTS risks (
@@ -155,8 +283,10 @@ CREATE TABLE IF NOT EXISTS risks (
 CREATE TABLE IF NOT EXISTS action_audit (
     id TEXT PRIMARY KEY,
     actor_role TEXT NOT NULL,
+    worker_run_id TEXT,
     action TEXT NOT NULL,
     policy_decision TEXT NOT NULL,
     external_ref TEXT,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (worker_run_id) REFERENCES worker_runs(id)
 );
