@@ -3,6 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS company_state (
     id INTEGER PRIMARY KEY CHECK (id = 1),
     mode TEXT NOT NULL DEFAULT 'discovery',
+    strategy_mode TEXT NOT NULL DEFAULT 'distribution_first',
     objective_version TEXT NOT NULL,
     available_capital_usd REAL NOT NULL DEFAULT 0,
     committed_capital_usd REAL NOT NULL DEFAULT 0,
@@ -16,6 +17,58 @@ CREATE TABLE IF NOT EXISTS opportunities (
     thesis TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS audiences (
+    id TEXT PRIMARY KEY,
+    opportunity_id TEXT,
+    name TEXT NOT NULL,
+    target_customer TEXT NOT NULL,
+    painful_job TEXT,
+    qualification_definition TEXT,
+    estimated_value_tier TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id)
+);
+
+CREATE TABLE IF NOT EXISTS distribution_assets (
+    id TEXT PRIMARY KEY,
+    audience_id TEXT NOT NULL,
+    opportunity_id TEXT,
+    name TEXT NOT NULL,
+    asset_type TEXT NOT NULL,
+    source_channel TEXT,
+    owned_or_rented TEXT NOT NULL CHECK (owned_or_rented IN ('owned','rented','hybrid')),
+    monthly_reach INTEGER NOT NULL DEFAULT 0,
+    qualified_users INTEGER NOT NULL DEFAULT 0,
+    repeat_users INTEGER NOT NULL DEFAULT 0,
+    permissioned_contacts INTEGER NOT NULL DEFAULT 0,
+    acquisition_cost_usd REAL,
+    organic_share REAL,
+    engagement_rate REAL,
+    commercial_intent_rate REAL,
+    status TEXT NOT NULL DEFAULT 'testing',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (audience_id) REFERENCES audiences(id),
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id)
+);
+
+CREATE TABLE IF NOT EXISTS commercial_signals (
+    id TEXT PRIMARY KEY,
+    audience_id TEXT,
+    distribution_asset_id TEXT,
+    opportunity_id TEXT,
+    signal_type TEXT NOT NULL,
+    signal_strength INTEGER NOT NULL DEFAULT 1 CHECK (signal_strength BETWEEN 1 AND 5),
+    source TEXT,
+    evidence_id TEXT,
+    observed_at TEXT NOT NULL,
+    FOREIGN KEY (audience_id) REFERENCES audiences(id),
+    FOREIGN KEY (distribution_asset_id) REFERENCES distribution_assets(id),
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(id),
+    FOREIGN KEY (evidence_id) REFERENCES evidence(id)
 );
 
 CREATE TABLE IF NOT EXISTS hypotheses (

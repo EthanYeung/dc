@@ -1,5 +1,6 @@
-version: 1
+version: 2
 mode: discovery
+strategy_mode: distribution_first
 objective_version: v1
 
 capital:
@@ -10,11 +11,21 @@ portfolio:
   active_opportunities: []
   active_experiments: []
   active_ventures: []
+  active_distribution_assets: []
 
 current_priorities:
-  - discover high-value monetizable problems
-  - validate willingness to pay before substantial build
-  - reach first externally verified revenue
+  - identify valuable audiences around real and recurring problems
+  - test low-cost paths to qualified users before heavy product investment
+  - build durable owned distribution where evidence supports it
+  - collect repeat-usage and commercial-intent signals
+  - continue monetization probes without requiring immediate full-scale revenue
+  - preserve optionality until stronger external evidence justifies a venture
+
+current_strategy_notes:
+  - distribution is a means to sustainable cash flow, not an end state
+  - qualified audience matters more than raw traffic
+  - traffic must have a plausible path to durable user relationships or economic value
+  - do not wait for "large traffic" before testing commercial intent
 
 founder_attention:
   target: exception_only
