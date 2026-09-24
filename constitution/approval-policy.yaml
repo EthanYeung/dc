@@ -1,0 +1,25 @@
+version: 1
+currency: USD
+
+autonomous:
+  max_single_action_spend: 50
+  max_single_experiment_spend: 200
+  max_recurring_commitment: 0
+
+founder_approval_required:
+  - spend_above_limit
+  - any_new_recurring_financial_commitment
+  - borrowing_or_credit
+  - acquisition_or_disposal_of_material_assets
+  - production_data_deletion
+  - credential_scope_expansion
+  - legal_or_regulatory_uncertainty_with_material_downside
+  - public_claim_with_material_reputational_or_legal_risk
+  - irreversible_external_commitment
+
+prohibited:
+  - bypass_policy_engine
+  - store_plaintext_secrets_in_git
+  - disable_audit_logging
+  - disable_kill_switch
+  - fabricate_evidence
