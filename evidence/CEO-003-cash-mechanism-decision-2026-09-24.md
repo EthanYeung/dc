@@ -2,7 +2,7 @@
 
 - 决策日：2026-09-24
 - 范围：美国低资本现金机制的公开资料比较、独立 Auditor 复核与 Allocator 选择。
-- 状态：候选筛选与批准请求；不是市场测试授权。未联系用户、未发帖、未开户、未花费、未收款、未承诺交付，也未建立 active Experiment。
+- 状态：Founder 已于 2026-09-25 批准并完成 Stage 0 公开来源前置核验；结果为 HOLD/NO-GO，不是市场测试授权。未联系用户、未发帖、未开户、未花费、未收款、未承诺交付，也未建立 active Experiment。
 - 当前内部状态：`state/bootstrap.yaml` 记载 `DISCOVERY`、可用/承诺资金均为 $0、无 active experiment。[unverified]
 
 ## 1. Allocator 决定
@@ -47,13 +47,24 @@
 - 成功判据暂不锁定：应在具体买家、交付物、渠道与净现金核验路径确认后，由 Auditor/Allocator 写入独立的正式实验审批请求；至少须以可核验的 settled/withdrawable 或到账净现金扣除退款、拒付和直接成本，而非点击、意向、平台余额或未到账款作为现金证据。[unverified]
 - 失败/停止判据：若渠道许可、账户资格/提现链路、法律与税务边界、风险上限任一项无法核实，停止该候选，不联系、不收款、不垫资。[unverified]
 
-## 4. 未决事项与下一触发
+## 4. Founder 批准的 Stage 0 公开来源前置核验（2026-09-25）
 
-1. 先由 Founder 对 `approvals/CEO-003-approval-request-2026-09-24.md` 中的 Stage 0 请求作出决定。该请求只覆盖不超过 2 个 agent-hours、$0、公开来源的前置核验，不授权外联或真实实验。
-2. 如获批，核实一个具体、允许使用的渠道及其招募边界；核实可用支付/收款资格、KYC、实际费用、结算/提现、保留款、退款与拒付；确定服务边界、隐私数据最小化与人工损失上限。
-3. 任一前置项通过后，另行提交候选 A 的正式实验审批请求；在此之前保持 `DISCOVERY`，不创建 active Experiment。
+- 批准记录：Founder 在聊天中批准 `APR-CEO-003-001`，仅覆盖公开来源、$0、最多 2 agent-hours 的前置核验；不授权外联、开户、发帖/上架、收款或测试。批准状态记入 `approvals/CEO-003-approval-request-2026-09-24.md`。
+- 目标买家假设：美国小型独立簿记事务所负责人或实际执行月结的簿记师，使用 QBO、服务多个 SMB 客户。该 ICP 来自 CEO-002 的条件性 Discovery 草案，不是具体具名线索，也没有已观察到的购买意向、承诺或付款。[unverified]
+- 服务假设：固定范围的“月末关账异常流程诊断”，只依据不含客户身份、交易、银行、税务或账户数据的流程问卷，交付一页异常分类/下一步清单和一次修改；履约上限 2 小时。$149 仍只是未验证的试价假设，未批准报价、未向买家提出。[unverified]
+- 渠道候选：Upwork Project Catalog。官方帮助页描述了建立项目、提交审查、获接受后启用的流程；这只证明平台有一般服务目录路径，不代表 DC 的账户资格、该服务类别、具体 listing 或零成本发布已获确认。[33] Upwork 自由职业者服务费按合同为 0%–15%；DC 的实际合同费率未知。[10]
+- 资金路径（平台通用规则，不是 DC 实测）：固定价项目有客户审阅期，提交后最多 14 天批准或要求修改，之后资金进入 5 天安全暂留；因此平台余额/托管款不等同于 DC 已实现或可提现现金。[37] Upwork 帮助页列出美国银行提现流程及提现方式启用等待期，但没有核实 DC 的银行、税务地址、账户资格或本账户的实际到账时间/费用。[39][unverified]
+- KYC/税务与反转：Upwork 可能要求核验法定姓名、生日、地址及 SSN/税号等身份资料；没有创建账户，也没有收集或保存这些个人信息。[41] 公开帮助内容显示存在 365 天内付款的退款请求路径，但本轮未能确认 DC 账户的 chargeback 追偿范围、退款后的最大损失或固定责任上限。[43][unverified] 具体法律实体、税务分类、退款/拒付责任上限仍未解决。
+- 渠道门槛：尚未核实该确切服务应归入的 Upwork 类别、零现金发布条件、DC 可用的 KYC/收款资格和账户级提现链路；没有实际买家或任何市场行为证据。[unverified] Upwork 是租用平台渠道，平台规则与费率不能证明需求或复购。[unverified]
+- 时间记录：本轮没有独立计量 agent-hours；不声称精确用时。因关键门槛仍未核实，按批准范围停止，不继续扩展研究。
 
-**最终状态：** 1 个条件性候选（A）进入审批前置审查；B/C/D 本轮排除；0 个获准或运行中的真实现金实验；支出 $0；没有需求或收入已验证。[unverified]
+### Auditor / Allocator gate
+
+**决定：HOLD / NO-GO。** 目标买家仍是 ICP 假设而非具体买家，服务和价格尚未验证；Upwork 只是通用渠道候选，账号/分类/零成本发布资格和最大退款/拒付损失未通过核验。不得创建账号、发布项目、接触客户或启动真实现金实验。保持 `DISCOVERY`，不提交现金实验批准请求。
+
+**下一触发：** 只有在 Founder 单独决定是否授权下一阶段的账号/渠道验证，并由 Founder 直接处理任何身份、税务和银行验证（不得将凭证或身份号码发到聊天或仓库）后，才可重新评估候选 A；任何上架、外联、收款或实际履约仍需另行、具体的批准。若不愿承担平台资格与退款/拒付不确定性，则关闭 A，回到 CEO-002 的 #5 Discovery 问题，不追加桌面研究。
+
+**最终状态：** Stage 0 已完成但未通过测试门槛；A 仍为条件性候选，B/C/D 本轮排除；0 个获准或运行中的真实现金实验；支出 $0；没有需求、收入或复购证据。[unverified]
 
 ## Sources
 
@@ -66,6 +77,8 @@
     > "Payouts are also paused automatically when your chargeback rate goes above 1% of your sales volume."
     > "sale that is at least 7 days old."
     > "chargeback rate goes above 1% of your sales volume."
+[10] https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee — Upwork Freelancer Service Fee
+    > "The fee ranges from 0% to 15% per contract."
 [16] https://affiliate-program.amazon.com/help/node/topic/GKDG94FQSRXSJCGK?linkId=333617465 — Amazon Associates payment timing and minimums
     > "Approximately 60 days after the end of each month"
     > "we will not send payment until the total amount due is at least USD 10."
@@ -83,3 +96,14 @@
     > "The closer the disclosure is to your recommendation, the better."
 [25] https://help.fiverr.com/hc/en-us/articles/360011421198-FAQs-for-freelancers — FAQs for freelancers — Fiverr Help Center
     > "After the order is marked as complete, you have to wait 14 days to withdraw your funds."
+[33] https://support.upwork.com/hc/en-us/articles/360057397533-How-to-create-a-project-in-Project-Catalog — How to create a project in Project Catalog — Upwork Help
+    > "The project moves to your active tab and is switched on automatically."
+[37] https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work — How payments for milestones and fixed-price contracts work — Upwork Help
+    > "After you submit, your client has 14 days to approve or request changes."
+    > "You’ll receive a 5-day security hold on your funds."
+[39] https://support.upwork.com/hc/en-us/articles/211063818-How-to-withdraw-earnings-to-your-U-S-bank-on-Upwork — How to withdraw earnings to your U.S. bank on Upwork — Upwork Help
+    > "Your new withdrawal method will become active three days after you confirm the account."
+[41] https://support.upwork.com/hc/en-us/articles/211067818-Know-Your-Customer-KYC-identity-information — Know Your Customer (KYC) identity information — Upwork Help
+    > "legal name, birthday, address, and Social Security or tax identification number"
+[43] https://support.upwork.com/hc/en-us/articles/17976486850451--Request-a-refund — Request a refund — Upwork Help
+    > "within the past 365 days"
