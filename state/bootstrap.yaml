@@ -1,0 +1,20 @@
+version: 1
+mode: discovery
+objective_version: v1
+
+capital:
+  available_usd: 0
+  committed_usd: 0
+
+portfolio:
+  active_opportunities: []
+  active_experiments: []
+  active_ventures: []
+
+current_priorities:
+  - discover high-value monetizable problems
+  - validate willingness to pay before substantial build
+  - reach first externally verified revenue
+
+founder_attention:
+  target: exception_only
