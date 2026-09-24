@@ -1,0 +1,14 @@
+version: 1
+currency: USD
+
+limits:
+  autonomous_single_action: 50
+  autonomous_single_experiment: 200
+  recurring_commitment: 0
+
+rules:
+  - all_spend_must_link_to_experiment_or_operating_obligation
+  - estimated_spend_must_be_checked_before_action
+  - actual_spend_must_be_recorded_after_action
+  - uncertain_total_liability_requires_approval
+  - splitting_one_purchase_to_evade_a_limit_is_prohibited

@@ -1,0 +1,63 @@
+version: 1
+
+roles:
+  allocator:
+    allow:
+      - read_company_state
+      - create_task
+      - create_experiment
+      - allocate_within_budget
+      - stop_experiment
+      - read_ledger
+      - request_approval
+    deny:
+      - modify_constitution
+      - expand_credential_scope
+      - bypass_guard
+
+  research:
+    allow:
+      - web_search
+      - browser_read
+      - low_risk_browser_interaction
+      - analysis
+      - write_evidence
+      - request_task
+    deny:
+      - production_deploy
+      - production_delete
+      - financial_commitment
+
+  builder:
+    allow:
+      - terminal
+      - repository_write
+      - test
+      - approved_deploy
+      - browser
+      - computer_use
+    deny:
+      - alter_financial_limits
+      - unapproved_recurring_commitment
+
+  growth:
+    allow:
+      - browser
+      - approved_outreach
+      - approved_channel_operation
+      - write_evidence
+      - spend_within_experiment_budget
+    deny:
+      - credential_admin
+      - production_infrastructure_admin
+
+  auditor:
+    allow:
+      - read_all_operational_state
+      - read_audit_log
+      - read_ledger
+      - write_audit_finding
+    deny:
+      - spend
+      - deploy
+      - grant_exception
