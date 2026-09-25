@@ -15,6 +15,14 @@ delegation:
     - access_master_credentials
     - perform_unapproved_irreversible_action
 
+real_world_experiment_controls:
+  exposure_assessment: policy_engine.assess_exposure
+  assessment_grants_execution_authority: false
+  first_live_action_requires_verified_founder_decision: true
+  class_b_requires_independent_domain_review: true
+  class_c_permitted: false
+  unknown_action_or_risk_flag: fail_closed
+
 roles:
   allocator:
     allow:
@@ -69,6 +77,9 @@ roles:
     deny:
       - credential_admin
       - production_infrastructure_admin
+      - unapproved_real_world_experiment_action
+      - borrowing_credit_guarantee_or_asset_pledge
+      - custom_uncapped_liability
 
   auditor:
     allow:

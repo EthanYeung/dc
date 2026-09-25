@@ -1,6 +1,8 @@
 version: 1
 currency: USD
 
+# Autonomous cash-spend ceilings do not cap contract, refund, indemnity,
+# chargeback, account-recovery, or other non-cash exposure.
 limits:
   autonomous_single_action: 50
   autonomous_single_experiment: 200
@@ -12,3 +14,9 @@ rules:
   - actual_spend_must_be_recorded_after_action
   - uncertain_total_liability_requires_approval
   - splitting_one_purchase_to_evade_a_limit_is_prohibited
+  - classify_operational_exposure_before_requesting_experiment_approval
+  - record_finite_experiment_specific_transaction_spend_time_attention_and_labor_caps_and_plausible_loss_estimate
+  - first_live_transaction_requires_separate_written_founder_approval
+  - class_b_requires_independent_domain_appropriate_review_before_founder_decision
+  - class_b_without_exact_contractual_cap_requires_reviewed_liability_containment
+  - class_c_exposure_is_prohibited_and_cannot_be_waived_by_experiment_approval

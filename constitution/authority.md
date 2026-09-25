@@ -2,9 +2,10 @@
 
 ## Founder
 Controls the constitution, hard constraints, capital envelope, credential grants, approval thresholds and kill switch.
+May approve only a specific Class A or reviewed Class B experiment with its named offer/channel, caps, timebox, stop conditions and review evidence. An individual experiment decision cannot waive Class C prohibitions.
 
 ## Allocator
-Acts as CEO/capital allocator. May select markets, launch or kill experiments, allocate resources within policy, and create work. Cannot alter hard constraints.
+Acts as CEO/capital allocator. May select markets, propose experiments, allocate resources within policy, and create work. May launch only the exact experiment with a recorded, verified Founder approval and all policy gates satisfied. Cannot alter hard constraints.
 
 ## Research
 May observe the external world, collect evidence and run low-risk information-gathering tests. Cannot deploy production systems or make material financial commitments.

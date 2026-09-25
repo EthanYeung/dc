@@ -7,6 +7,9 @@ autonomous:
   max_recurring_commitment: 0
 
 founder_approval_required:
+  - first_live_transaction_for_each_real_world_experiment
+  - class_a_bounded_exposure
+  - class_b_after_independent_review
   - spend_above_limit
   - any_new_recurring_financial_commitment
   - borrowing_or_credit
@@ -23,3 +26,95 @@ prohibited:
   - disable_audit_logging
   - disable_kill_switch
   - fabricate_evidence
+  - borrowing_or_credit_for_experiments
+  - personal_guarantees_or_surety
+  - pledging_assets_for_experiments
+  - intentionally_uncapped_custom_liability
+  - material_downside_without_credible_containment
+  - deceptive_or_unlawful_arrangements
+
+operational_exposure:
+  assessment_api: policy_engine.assess_exposure
+  assessment_scope: review_readiness_only
+  execution_authorized_by_assessment: false
+  action_labels_do_not_authenticate_tool_operations: true
+  unverified_action_binding: deny
+  unknown_risk_flags: class_b_and_not_eligible_for_founder_review_until_policy_review
+  founder_decision_required_before_first_live_transaction: true
+  founder_decision_record_must_name:
+    - experiment_id
+    - approved_offer_and_channel
+    - risk_class_and_risk_flags
+    - terms_and_risk_evidence_references
+    - independent_reviewer_role_and_evidence_reference_when_class_b
+    - liability_containment_review_when_class_b_has_no_exact_contractual_cap
+    - max_transactions
+    - max_transaction_value_usd
+    - estimated_max_plausible_loss_usd
+    - max_direct_spend_usd
+    - max_founder_attention_minutes
+    - max_delivery_labor_hours
+    - timebox_days
+    - stop_and_reversal_or_dispute_conditions
+  amount_thresholds: experiment_specific_and_explicitly_approved
+  class_a:
+    founder_approval_required: true
+    max_transactions: 1
+    max_channels: 1
+    max_offers: 1
+    contractual_liability_cap_required: false
+    standardized_terms_required: true
+    standardized_terms_must_be_accepted_as_is: true
+    negotiating_away_or_bypassing_platform_safeguards_prohibited: true
+    custom_indemnity_permitted: false
+    no_recurring_commitment: true
+    no_sensitive_data: true
+    no_regulated_professional_advice: true
+    finite_per_experiment_caps_required:
+      - max_transaction_value_usd
+      - max_direct_spend_usd
+      - max_founder_attention_minutes
+      - max_delivery_labor_hours
+      - timebox_days
+    required_controls:
+      - complete_terms_and_risk_evidence
+      - documented_plausible_loss_estimate_and_residual_risk
+      - defined_stop_conditions
+      - defined_reversal_or_dispute_plan
+      - verified_operational_containment
+    note: classifier_eligibility_is_not_approval_or_execution_authority
+  class_b:
+    founder_approval_required: true
+    independent_domain_appropriate_review_required: true
+    execution_blocked_until_both_reviews_are_complete: true
+    when_contractual_liability_cap_is_absent:
+      independent_review_must_verify_credible_liability_containment: true
+      founder_review_eligibility_requires_liability_containment_verified: true
+    independent_review_record_fields:
+      - independent_reviewer_role
+      - independent_review_evidence_ref
+      - findings_and_residual_risk
+      - liability_containment_finding_when_no_exact_cap
+    risk_flags:
+      - material_indemnity
+      - sensitive_data
+      - regulated_advice
+      - significant_refund_or_dispute_risk
+      - unclear_contracting_entity
+      - legal_or_tax_uncertainty
+      - uncertain_surviving_obligations
+      - recurring_commitment
+      - nonstandard_terms
+      - multiple_transactions
+      - unverified_payout_path
+  class_c:
+    prohibited: true
+    founder_experiment_approval_exception: false
+    risk_flags:
+      - borrowing
+      - personal_guarantee
+      - asset_pledge
+      - custom_uncapped_liability
+      - no_credible_containment
+      - deception_or_illegality
+      - policy_bypass
