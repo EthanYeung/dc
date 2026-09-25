@@ -127,6 +127,7 @@ This work narrows the candidate to one offer and one channel, distinguishes adja
     > "You can cancel a project within 24 hours of receiving a client’s requirements for any reason"
 [6] https://support.upwork.com/hc/en-us/articles/4408644453395-How-we-review-your-Project-Catalog-project
     > "For others, the process may take a few weeks due to submission volume."
+    > "When you submit a project, we will look at it before clients can purchase it."
 [7] https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee
     > "The fee ranges from 0% to 15% per contract"
 [8] https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work
@@ -136,3 +137,4 @@ This work narrows the candidate to one offer and one channel, distinguishes adja
     > "Research Analyst Needed for Market Research, Data Analysis & Business Insights"
     > "Posted September 3, 2026"
     > "Proposals:10 to 15"
+    > "Proposals:10 to 15 Hires:1"
