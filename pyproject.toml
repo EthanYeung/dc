@@ -3,6 +3,9 @@ name = "dc"
 version = "0.1.0"
 description = "Autonomous digital company control plane"
 requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=42",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]

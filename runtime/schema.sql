@@ -290,3 +290,154 @@ CREATE TABLE IF NOT EXISTS action_audit (
     created_at TEXT NOT NULL,
     FOREIGN KEY (worker_run_id) REFERENCES worker_runs(id)
 );
+
+CREATE TABLE IF NOT EXISTS approval_records (
+    approval_id TEXT PRIMARY KEY,
+    payload_json TEXT NOT NULL,
+    signature_b64 TEXT NOT NULL,
+    key_id TEXT NOT NULL,
+    received_at TEXT NOT NULL
+);
+
+CREATE TRIGGER IF NOT EXISTS approval_records_no_update
+BEFORE UPDATE ON approval_records
+BEGIN
+    SELECT RAISE(ABORT, 'approval records are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS approval_records_no_delete
+BEFORE DELETE ON approval_records
+BEGIN
+    SELECT RAISE(ABORT, 'approval records are immutable');
+END;
+
+CREATE TABLE IF NOT EXISTS gateway_control (
+    control_id TEXT PRIMARY KEY CHECK (control_id = 'global'),
+    kill_switch_active INTEGER NOT NULL CHECK (kill_switch_active IN (0,1)),
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT OR IGNORE INTO gateway_control (control_id, kill_switch_active)
+VALUES ('global', 1);
+
+CREATE TABLE IF NOT EXISTS execution_attempts (
+    attempt_id TEXT PRIMARY KEY,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    actor_role TEXT NOT NULL,
+    principal_id TEXT NOT NULL DEFAULT 'unknown',
+    worker_run_id TEXT,
+    action_id TEXT NOT NULL,
+    action_scope TEXT NOT NULL CHECK (action_scope IN ('internal','external','unknown')),
+    approval_id TEXT,
+    experiment_id TEXT,
+    offer_id TEXT,
+    channel_id TEXT,
+    decision TEXT NOT NULL CHECK (decision IN ('allow','deny')),
+    reason TEXT NOT NULL,
+    request_digest TEXT NOT NULL,
+    transaction_value_usd TEXT NOT NULL,
+    direct_spend_usd TEXT NOT NULL,
+    founder_attention_minutes TEXT NOT NULL,
+    delivery_labor_hours TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS execution_attempts_by_approval
+    ON execution_attempts (approval_id, decision);
+CREATE INDEX IF NOT EXISTS execution_attempts_by_experiment
+    ON execution_attempts (experiment_id, decision);
+
+CREATE TRIGGER IF NOT EXISTS execution_attempts_no_update
+BEFORE UPDATE ON execution_attempts
+BEGIN
+    SELECT RAISE(ABORT, 'execution attempts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS execution_attempts_no_delete
+BEFORE DELETE ON execution_attempts
+BEGIN
+    SELECT RAISE(ABORT, 'execution attempts are immutable');
+END;
+
+CREATE TABLE IF NOT EXISTS execution_attempt_relations (
+    relation_id TEXT PRIMARY KEY,
+    denial_attempt_id TEXT NOT NULL,
+    relation_type TEXT NOT NULL CHECK (relation_type = 'idempotency_collision'),
+    target_attempt_digest TEXT NOT NULL,
+    idempotency_key_digest TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE (denial_attempt_id, relation_type),
+    FOREIGN KEY (denial_attempt_id) REFERENCES execution_attempts(attempt_id)
+);
+
+CREATE INDEX IF NOT EXISTS execution_attempt_relations_by_denial
+    ON execution_attempt_relations (denial_attempt_id, relation_type);
+
+CREATE TRIGGER IF NOT EXISTS execution_attempt_relations_no_update
+BEFORE UPDATE ON execution_attempt_relations
+BEGIN
+    SELECT RAISE(ABORT, 'execution attempt relations are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS execution_attempt_relations_no_delete
+BEFORE DELETE ON execution_attempt_relations
+BEGIN
+    SELECT RAISE(ABORT, 'execution attempt relations are immutable');
+END;
+
+CREATE TABLE IF NOT EXISTS execution_results (
+    result_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL CHECK (status IN ('verified','tool_error','verification_failed')),
+    result_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (attempt_id) REFERENCES execution_attempts(attempt_id)
+);
+
+CREATE TRIGGER IF NOT EXISTS execution_results_no_update
+BEFORE UPDATE ON execution_results
+BEGIN
+    SELECT RAISE(ABORT, 'execution results are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS execution_results_no_delete
+BEFORE DELETE ON execution_results
+BEGIN
+    SELECT RAISE(ABORT, 'execution results are immutable');
+END;
+
+CREATE TABLE IF NOT EXISTS execution_events (
+    event_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL,
+    idempotency_key TEXT NOT NULL,
+    event_type TEXT NOT NULL CHECK (
+        event_type IN (
+            'idempotent_replay',
+            'idempotent_replay_denied',
+            'idempotency_key_conflict',
+            'execution_reserved',
+            'execution_admitted',
+            'execution_blocked',
+            'result_persistence_failed'
+        )
+    ),
+    reason TEXT NOT NULL,
+    request_digest TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (attempt_id) REFERENCES execution_attempts(attempt_id)
+);
+
+CREATE INDEX IF NOT EXISTS execution_events_by_attempt
+    ON execution_events (attempt_id, created_at);
+
+CREATE TRIGGER IF NOT EXISTS execution_events_no_update
+BEFORE UPDATE ON execution_events
+BEGIN
+    SELECT RAISE(ABORT, 'execution events are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS execution_events_no_delete
+BEFORE DELETE ON execution_events
+BEGIN
+    SELECT RAISE(ABORT, 'execution events are immutable');
+END;

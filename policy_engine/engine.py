@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -45,6 +45,7 @@ FOUNDER_APPROVAL_ACTIONS = {
     "contact_customer",
     "accept_payment",
     "deliver_paid_experiment",
+    "record_payout_state",
     "start_real_world_experiment",
 }
 
